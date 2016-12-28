@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mEditText;
     private Button mButton;
     private SharedPreferences setting;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
         textView.setTextSize(24);
-        textView.setText(text);
         textView.setTextColor(0xffff0000);
+        textView.setText(text);
         return textView;
     }
 
