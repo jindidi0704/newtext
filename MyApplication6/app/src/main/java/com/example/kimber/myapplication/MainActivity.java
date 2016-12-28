@@ -61,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
         final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
+        textView.setTextSize(24);
         textView.setText(text);
+        textView.setTextColor(0xffff0000);
         return textView;
     }
 
