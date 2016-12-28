@@ -2,7 +2,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/darker_gray"
+    android:background="@drawable/bg"
     android:id="@+id/linearLayout">
 
     <EditText
