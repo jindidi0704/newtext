@@ -22,4 +22,12 @@
         android:text="確認"
         android:layout_gravity="right"
     />
+
+    Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="儲存"
+        android:id="@+id/savebutton"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

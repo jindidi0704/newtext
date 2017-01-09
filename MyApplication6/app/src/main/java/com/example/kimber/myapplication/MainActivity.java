@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mLayout;
     private EditText mEditText;
     private Button mButton;
-    private SharedPreferences setting;
-
+    private Button saveButton;
+    private static final String KEY_DATA = "";
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -38,26 +38,45 @@ public class MainActivity extends AppCompatActivity {
         mLayout = (LinearLayout) findViewById(R.id.linearLayout);
         mEditText = (EditText) findViewById(R.id.editText);
         mButton = (Button) findViewById(R.id.button);
-        mButton.setOnClickListener(onClick());
+
+        final SharedPreferences setting = getSharedPreferences(KEY_DATA, Context.MODE_PRIVATE);
 
         TextView textView = new TextView(this);
-        textView.setText("New text");
+        String data = setting.getString(KEY_DATA,"");
+        textView.setText(data);
+
+        mButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mLayout.addView(createNewTextView(mEditText.getText().toString()));
+                mEditText.setText("");
+                setting
+                        .edit()
+                        .putString(KEY_DATA,mEditText.getText().toString())
+                        .apply();
+            }
+        });
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private OnClickListener onClick() {
+    /*private OnClickListener onClick() {
         return new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 mLayout.addView(createNewTextView(mEditText.getText().toString()));
                 mEditText.setText("");
+                setting
+                       .edit()
+                        .putString(KEY_DATA,mEditText.getText().toString())
+                        .apply();
             }
         };
-    }
+    }*/
+
 
     public TextView createNewTextView(String text) {
         final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -68,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(text);
         return textView;
     }
-
 
     @Override
     public void onStart() {
