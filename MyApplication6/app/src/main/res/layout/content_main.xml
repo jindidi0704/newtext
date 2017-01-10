@@ -8,7 +8,7 @@
     <EditText
         android:layout_marginTop="30pt"
         android:id="@+id/editText"
-        android:hint="要記什麼"
+        android:hint="Type Here (In Single Line)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:imeOptions="actionDone"
@@ -19,15 +19,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="確認"
+        android:text="Confirm"
         android:layout_gravity="right"
     />
-
-    Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="儲存"
-        android:id="@+id/savebutton"
-        android:layout_gravity="center_horizontal" />
-
 </LinearLayout>

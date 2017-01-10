@@ -2,29 +2,29 @@ package com.example.kimber.myapplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.webkit.WebSettings;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
 import android.widget.LinearLayout.LayoutParams;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private LinearLayout mLayout;
     private EditText mEditText;
-    private Button mButton;
-    private Button saveButton;
-    private static final String KEY_DATA = "";
+    private static final String PREFERENCES_DATA = "DATA";
+
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -33,27 +33,44 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Button mButton;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_DATA, Context.MODE_PRIVATE);
+        final int[] dataCounter = {1};
+        dataCounter[0] = 0;
+        
         mLayout = (LinearLayout) findViewById(R.id.linearLayout);
         mEditText = (EditText) findViewById(R.id.editText);
         mButton = (Button) findViewById(R.id.button);
+        int howmanydata = sharedPreferences.getInt("howmany", 0);
 
-        final SharedPreferences setting = getSharedPreferences(KEY_DATA, Context.MODE_PRIVATE);
+        if (howmanydata > 0) {
+            for (int i = 1; i <= howmanydata; i++) {
+                String oldData = sharedPreferences.getString("KEY_SAVE" + i, "");
+                mLayout.addView(createNewTextView(oldData));
+            }
+        }
 
-        TextView textView = new TextView(this);
-        String data = setting.getString(KEY_DATA,"");
-        textView.setText(data);
-
-        mButton.setOnClickListener(new View.OnClickListener(){
+        mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLayout.addView(createNewTextView(mEditText.getText().toString()));
-                mEditText.setText("");
-                setting
-                        .edit()
-                        .putString(KEY_DATA,mEditText.getText().toString())
-                        .apply();
+                if (notEmpty(mEditText)) {
+                    dataCounter[0]++;
+                    mLayout.addView(createNewTextView(mEditText.getText().toString()));
+
+                    sharedPreferences
+                            .edit()
+                            .putString("KEY_SAVE" + dataCounter[0], mEditText.getText().toString())
+                            .apply();
+
+                    mEditText.setText("");
+
+                    sharedPreferences
+                            .edit()
+                            .putInt("howmany", dataCounter[0])
+                            .apply();
+                }
             }
         });
 
@@ -61,22 +78,6 @@ public class MainActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-
-    /*private OnClickListener onClick() {
-        return new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mLayout.addView(createNewTextView(mEditText.getText().toString()));
-                mEditText.setText("");
-                setting
-                       .edit()
-                        .putString(KEY_DATA,mEditText.getText().toString())
-                        .apply();
-            }
-        };
-    }*/
-
 
     public TextView createNewTextView(String text) {
         final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -87,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(text);
         return textView;
     }
+
+    private boolean notEmpty(EditText editText) {
+        return (editText.getText().toString().trim().length() > 0);
+    }
+
 
     @Override
     public void onStart() {
